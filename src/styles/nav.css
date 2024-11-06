@@ -1,0 +1,19 @@
+.nav-link {
+  position: relative;
+}
+.nav-link::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: -2px;
+  width: 100%;
+  height: 2px;
+  background-color: white; /* Underline color */
+  transform: scaleX(0); /* hide underlining by default */
+  transform-origin: right left; /* align the underline at the middle of the link */
+  transition: transform 0.25s ease-out;
+}
+.nav-link:hover::after {
+  transform: scaleX(1); /* show underline on hover */
+  transform-origin: right left; /* align the underline at the middle of the link */
+}

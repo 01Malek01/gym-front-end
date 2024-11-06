@@ -1,0 +1,15 @@
+.testimonials-wrapper {
+  background: #111827;
+  color: #f3f4f6;
+}
+
+.testimonial-item {
+  border-radius: 8px;
+  background: #1f2937;
+  padding: 20px;
+  transition: transform 0.3s ease;
+}
+
+.testimonial-item:hover {
+  transform: scale(1.05);
+}
