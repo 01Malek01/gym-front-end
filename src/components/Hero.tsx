@@ -30,7 +30,7 @@ export default function Hero() {
               mass: 0.7,
               stiffness: 1000,
             }}
-            className="hero-headline font-bold text-8xl text-slate-50 text-center italic"
+            className="hero-headline font-bold text-8xl text-app_secondary-orange text-center italic font-poppins"
           >
             NO PAIN
           </motion.div>
@@ -45,7 +45,7 @@ export default function Hero() {
               mass: 0.7,
               stiffness: 1000,
             }}
-            className="hero-headline font-bold text-8xl text-slate-50 text-center italic md:ml-40"
+            className="hero-headline font-bold text-8xl text-slate-50 text-center italic md:ml-40 font-poppins"
           >
             NO GAIN
           </motion.div>

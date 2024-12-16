@@ -76,14 +76,17 @@ export default function Footer() {
         <div className="space-y-2">
           <h3 className="text-lg font-medium text-slate-50">Contact Us</h3>
           <p className="text-slate-400">123 Fitness Blvd, Fit City, FC 12345</p>
-          <p className="text-slate-400">Email: info@gymelite.com</p>
-          <p className="text-slate-400">Phone: (123) 456-7890</p>
+          <p className="text-slate-400">Email: malekmostafa0051@gmail.com</p>
+          <p className="text-slate-400">Phone: +20 1125485384</p>
         </div>
       </div>
 
       <div className="border-t border-slate-700 mt-8 pt-4 text-center text-slate-500 text-sm">
         © {new Date().getFullYear()} Malek's Gym. All rights reserved.
       </div>
+      <p className="text-center text-sm mt-5">
+        Full-stack website developed by: Malek Mostafa
+      </p>
     </footer>
   );
 }
