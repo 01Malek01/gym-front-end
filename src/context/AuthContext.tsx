@@ -2,17 +2,17 @@ import { createContext, useContext, useEffect, useState } from "react";
 import { AuthContextType, User } from "../types";
 import { useAuthCheck } from "../hooks/useCheckAuth";
 import useGetUserProfile from "../hooks/api/useGetUserProfile";
-import { useToast } from "../hooks/use-toast";
+import useLogout from "../hooks/api/useLogout";
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 const AuthContextProvider = ({ children }: React.PropsWithChildren) => {
   const [user, setUser] = useState<User | null>(null);
-  const [isUserLoading, setIsUserLoading] = useState(null);
-  const [isSuccessUser, setIsSuccessUser] = useState(null);
+  const [isUserLoading, setIsUserLoading] = useState(true);
+  const [isSuccessUser, setIsSuccessUser] = useState(false);
   const [accessTokenState, setAccessTokenState] = useState<string | null>(null);
   const { isAuthenticated } = useAuthCheck();
-  const { toast } = useToast();
+  const { logoutUser } = useLogout();
   const {
     user: fetchedUser,
     error,
@@ -29,16 +29,15 @@ const AuthContextProvider = ({ children }: React.PropsWithChildren) => {
         setAccessTokenState(accessToken);
       }
     }
-  }, []); // Dependency list remains empty
+  }, []);
+
   useEffect(() => {
     if (fetchedUser) {
       setUser(fetchedUser?.user);
     } else if (error) {
-      toast({
-        title: "Error Fetching profile",
-        variant: "destructive",
-      });
-      console.error(error);
+      console.error("error occurred", error);
+      // logoutUser();
+      return;
     }
     if (isFetchedUserLoading) {
       setIsUserLoading(isFetchedUserLoading);
@@ -46,7 +45,7 @@ const AuthContextProvider = ({ children }: React.PropsWithChildren) => {
     if (isFetchedUser) {
       setIsSuccessUser(isFetchedUser);
     }
-  }, [error, fetchedUser, isFetchedUserLoading, isFetchedUser, toast]);
+  }, [error, fetchedUser, isFetchedUserLoading, isFetchedUser, logoutUser]);
   return (
     <AuthContext.Provider
       value={{

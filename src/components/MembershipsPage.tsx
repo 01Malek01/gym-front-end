@@ -1,13 +1,15 @@
 import { useEffect, useState } from "react";
 import useGetAllMemberships from "../hooks/api/useGetAllMemberships";
-import MembershipBox from "../components/MembershipBox";
+import MembershipBox from "./MembershipBox";
 import { Membership } from "../types";
 import basic from "../assets/images/basic.jpg";
 import prof from "../assets/images/prof.jpg";
 import ult from "../assets/images/ult.jpg";
 import { FaArrowDown } from "react-icons/fa";
 import { FaArrowUp } from "react-icons/fa";
-import Loader from "../components/custom-ui/Loader";
+import Loader from "./custom-ui/Loader";
+import { useNavigate } from "react-router-dom";
+import { useAuth } from "../context/AuthContext";
 
 type FAQItem = {
   question: string;
@@ -34,7 +36,7 @@ const FAQ: React.FC<{ faq: FAQItem }> = ({ faq }) => {
 export default function MembershipsPage() {
   const [membershipsState, setMembershipsState] = useState([]);
   const { memberships, isLoading } = useGetAllMemberships();
-
+  const { isAuthenticated } = useAuth();
   useEffect(() => {
     if (memberships) {
       setMembershipsState(memberships);
@@ -86,6 +88,9 @@ export default function MembershipsPage() {
                   : membership.type === "ultimate"
                   ? ult
                   : ""
+              }
+              href={
+                isAuthenticated ? `/membership/${membership._id}` : "/login"
               }
             />
           ))}

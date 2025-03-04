@@ -3,16 +3,19 @@ import {
   RouterProvider,
   Navigate,
 } from "react-router-dom";
-import LandingPage from "../pages/LandingPage";
 import Layout from "../Layout";
-import SignUpPage from "../pages/SignUpPage";
-import MembershipsPage from "../pages/MembershipsPage";
-import LoginPage from "../pages/LoginPage";
+import MembershipsPage from "../components/MembershipsPage";
 import Loader from "../components/custom-ui/Loader";
 import { useAuthCheck } from "../hooks/useCheckAuth";
-import UserDashboardPage from "../pages/UserDashboardPage";
 import { useAuth } from "../context/AuthContext";
-import AdminDashboardPage from "../pages/AdminDashboardPage";
+import ManageUsersPage from "../pages/Admin/ManageUsersPage";
+import LandingPage from "../components/LandingPage";
+import SignUpPage from "../pages/Auth/SignUpPage";
+import LoginPage from "../pages/Auth/LoginPage";
+import UserDashboardPage from "../pages/User/UserDashboardPage";
+import AdminDashboardPage from "../pages/Admin/AdminDashboardPage";
+import NotFoundPage from "../pages/NotFoundPage";
+import MembershipPage from "../pages/User/MembershipPage";
 
 // AppRoutes Component with TypeScript
 export default function AppRoutes(): JSX.Element {
@@ -67,6 +70,10 @@ export default function AppRoutes(): JSX.Element {
           element: <MembershipsPage />,
         },
         {
+          path: "/membership/:membershipId",
+          element: <MembershipPage />,
+        },
+        {
           // Protected route for admin
           path: "/admin/dashboard",
           element:
@@ -75,6 +82,14 @@ export default function AppRoutes(): JSX.Element {
             ) : (
               <Navigate to="/dashboard" /> // Redirect non-admins to user dashboard
             ),
+        },
+        {
+          path: "/admin/manage-users",
+          element: <ManageUsersPage />,
+        },
+        {
+          path: "*",
+          element: <NotFoundPage />,
         },
       ],
     },

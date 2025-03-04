@@ -10,11 +10,11 @@ import {
   FormMessage,
 } from "./ui/form";
 import useLogin from "../hooks/api/useLogin";
-import { useToast } from "../hooks/use-toast";
+import { Link } from "react-router-dom";
 
 export default function Login() {
-  const { loginUser, isPending, isSuccess, isError } = useLogin();
-  const { toast } = useToast();
+  const { loginUser, isPending } = useLogin();
+
   const formSchema = z.object({
     email: z.string().email({ message: "Invalid email" }),
     password: z
@@ -32,8 +32,9 @@ export default function Login() {
   });
 
   const { handleSubmit } = form;
+
   const login = async (data: z.infer<typeof formSchema>) => {
-    const res = await loginUser(data);
+    await loginUser(data);
   };
 
   return (
@@ -91,6 +92,14 @@ export default function Login() {
               >
                 {isPending ? "Logging in..." : "Login"}
               </button>
+            </div>
+
+            {/* Sign Up Link */}
+            <div className="text-center mt-4 text-gray-400">
+              Don't have an account?{" "}
+              <Link to="/signup" className="text-blue-400 hover:underline">
+                Sign up
+              </Link>
             </div>
           </form>
         </Form>

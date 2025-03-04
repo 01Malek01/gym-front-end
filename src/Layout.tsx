@@ -1,6 +1,8 @@
 import { Outlet } from "react-router-dom";
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
+// import AppSidebar from "./components/AppSidebar/AppSidebar";
+// import { SidebarTrigger } from "./components/ui/sidebar";
 
 export default function Layout() {
   return (
@@ -8,7 +10,7 @@ export default function Layout() {
       <nav>
         <Navbar />
       </nav>
-      <main>
+      <main className="">
         <Outlet />
       </main>{" "}
       <footer>

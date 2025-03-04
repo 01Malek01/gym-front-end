@@ -4,30 +4,30 @@ import { NavigationMenu, NavigationMenuList } from "./ui/navigation-menu";
 import "@/styles/nav.css";
 import Button1 from "./custom-ui/Button-1";
 import { useAuth } from "../context/AuthContext";
-const components = [
-  {
-    title: "Home",
-    href: "/",
-  },
-  {
-    title: "Memberships",
-    href: "/membership",
-  },
-  {
-    title: "Trainers",
-    href: "/trainer",
-  },
-  {
-    title: "Supplements",
-    href: "/supplement",
-  },
-  {
-    title: "Contact",
-    href: "/contact",
-  },
-];
 export default function Navbar() {
   const { isAuthenticated, user } = useAuth();
+  const components = [
+    {
+      title: user?.role === "admin" ? "Dashboard" : "Home",
+      href: "/",
+    },
+    {
+      title: "Memberships",
+      href: "/membership",
+    },
+    {
+      title: "Trainers",
+      href: "/trainer",
+    },
+    {
+      title: "Supplements",
+      href: "/supplement",
+    },
+    {
+      title: "Contact",
+      href: "/contact",
+    },
+  ];
   return (
     <div className="navbar-wrapper p-2 bg-app_secondary ">
       <div className="navbar-container w-full flex justify-between">

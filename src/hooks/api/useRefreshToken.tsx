@@ -1,16 +1,18 @@
 import { useMutation } from "@tanstack/react-query";
 import axiosInstance from "../../api/AxiosConfig";
 import { toast } from "../use-toast";
-import useLogout from "./useLogout";
+// import useLogout from "./useLogout";
 
 const useRefreshToken = () => {
-  const { logoutUser } = useLogout();
+  // const { logoutUser } = useLogout();
 
-  const refreshToken = async (): Promise<string | undefined> => {
+  const refreshToken = async (): Promise<
+    { accessToken: string } | undefined
+  > => {
     try {
       const res = await axiosInstance.post("/auth/refresh-token");
 
-      return res.data; // Assuming the response contains the new access token
+      return res.data; //  the response contains the new access token
     } catch (err) {
       console.error("Error refreshing token:", err);
 
@@ -28,7 +30,9 @@ const useRefreshToken = () => {
     }
   };
 
-  const { mutateAsync: refreshAccessToken } = useMutation<string | undefined>({
+  const { mutateAsync: refreshAccessToken } = useMutation<
+    { accessToken: string } | undefined
+  >({
     mutationFn: refreshToken,
     onError: (error) => {
       console.error("Mutation error while refreshing token:", error);

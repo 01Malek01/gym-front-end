@@ -10,6 +10,7 @@ import {
   FormMessage,
 } from "./ui/form";
 import useSignUp from "../hooks/api/useSignUp";
+import { Link } from "react-router-dom";
 
 export default function Signup() {
   const { signupUser, isPending, isSuccess } = useSignUp();
@@ -164,6 +165,14 @@ export default function Signup() {
               >
                 {isPending ? "Signing Up..." : "Sign Up"}
               </button>
+            </div>
+            <div className="text-center mt-4">
+              <p className="text-gray-400">
+                Have an account?{" "}
+                <Link to="/login" className="text-blue-500 hover:underline">
+                  Login
+                </Link>
+              </p>
             </div>
           </form>
         </Form>

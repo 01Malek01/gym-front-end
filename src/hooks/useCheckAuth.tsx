@@ -1,10 +1,11 @@
 import React, { createContext, useContext, useState, useEffect } from "react";
 import { isTokenValid } from "../helpers/ValidateJWT";
-import useLogout from "./api/useLogout";
+// import useLogout from "./api/useLogout";
 import useRefreshToken from "./api/useRefreshToken";
 
 interface checkAuthContextType {
-  isAuthenticated: boolean | undefined;
+  isAuthenticated: boolean;
+  setIsAuthenticated: React.Dispatch<React.SetStateAction<boolean>>;
   checkAuth: () => void;
 }
 
@@ -12,47 +13,51 @@ const checkAuthContext = createContext<checkAuthContextType | undefined>(
   undefined
 );
 
-const CheckAuthProvider: React.FC = ({ children }) => {
+const CheckAuthProvider = ({ children }: { children: React.ReactNode }) => {
   const { refreshAccessToken } = useRefreshToken();
-  const { logoutUser } = useLogout();
-  const [isAuthenticated, setIsAuthenticated] = useState<boolean | undefined>(
-    undefined
-  );
+  // const { logoutUser } = useLogout();
+  const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
 
   const checkAuth = async () => {
+    //retrieve the access token from local storage
     const accessToken =
       typeof window !== "undefined" && localStorage.getItem("accessToken");
 
-    if (accessToken && isTokenValid(accessToken)) {
+    if (!accessToken) {
+      setIsAuthenticated(false);
+      return;
+    } else if (accessToken && isTokenValid(accessToken)) {
       setIsAuthenticated(true);
       return;
     }
 
-    if (accessToken && accessToken !== undefined) {
+    //if the access token is expired, refresh it
+    if (accessToken && !isTokenValid(accessToken)) {
       try {
-        console.log("Refreshing token...");
         const res = await refreshAccessToken();
         const newAccessToken = res?.accessToken;
-        // console.log("new access token status", newAccessToken);
 
         if (newAccessToken) {
           localStorage.setItem("accessToken", newAccessToken);
           setIsAuthenticated(true);
         } else {
-          throw new Error("No new access token returned");
+          setIsAuthenticated(false);
         }
       } catch (error) {
         console.error("Failed to refresh token:", error);
         setIsAuthenticated(false);
       }
-    } else {
-      setIsAuthenticated(false);
     }
+    // else {
+    //   setIsAuthenticated(false);
+    // }
   };
 
+  //removed the dependency list from the useEffect hook to avoid infinite loop
+  //the effect will run only once when the component mounts
   useEffect(() => {
     checkAuth();
-  }, [refreshAccessToken, logoutUser]);
+  }, []);
 
   return (
     <checkAuthContext.Provider

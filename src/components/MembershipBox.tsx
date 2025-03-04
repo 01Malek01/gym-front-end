@@ -15,10 +15,9 @@ export default function MembershipBox({
   title,
   price,
   desc,
-  href,
+  href = "#",
   buttonTitle,
   imgSrc,
-  buttonAction,
 }: Props) {
   return (
     <div className="membership-box h-[500px] bg-slate-800 flex flex-col items-center gap-6 p-15 md:p-8 rounded-lg shadow-lg transform hover:scale-105 transition duration-300 ease-in-out relative">

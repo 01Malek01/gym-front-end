@@ -1,5 +1,4 @@
 import { jwtDecode } from "jwt-decode";
-import dayjs from "dayjs";
 interface DecodedToken {
   exp?: number; // `exp` is optional in case the token doesn't include it
 }
@@ -15,11 +14,7 @@ export const isTokenValid = (token: string): boolean => {
     const currentTime = Date.now() / 1000; // Current time in seconds
 
     // Check if the token has an expiration date and if it's still valid
-    // console.log(
-    //   "is access token valid:",
-    //   !!decoded.exp && decoded.exp > currentTime
-    // );
-    // console.log("access token", token, "expires", dayjs.format(decoded.exp));
+
     return !!decoded.exp && decoded.exp > currentTime;
   } catch (error) {
     console.error("Invalid token", token, error);
