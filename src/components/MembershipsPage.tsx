@@ -8,7 +8,7 @@ import ult from "../assets/images/ult.jpg";
 import { FaArrowDown } from "react-icons/fa";
 import { FaArrowUp } from "react-icons/fa";
 import Loader from "./custom-ui/Loader";
-import { useNavigate } from "react-router-dom";
+// import { useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 
 type FAQItem = {
@@ -40,7 +40,6 @@ export default function MembershipsPage() {
   useEffect(() => {
     if (memberships) {
       setMembershipsState(memberships);
-      console.log(memberships);
     }
   }, [memberships]);
 

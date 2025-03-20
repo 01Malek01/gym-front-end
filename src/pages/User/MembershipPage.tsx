@@ -1,33 +1,53 @@
-import { useEffect, useState } from "react";
-import { Link, useParams } from "react-router-dom";
+import { useState } from "react";
+import { useParams } from "react-router-dom";
 import useBuyMembership from "../../hooks/api/useBuyMembership";
 import Loader from "../../components/custom-ui/Loader";
 
 export default function MembershipPage() {
-  const params = useParams();
-  const membershipId = params.membershipId;
-  const { buyMembership, error, isError, isPending } = useBuyMembership();
-  const [checkOutUrl, setCheckOutUrl] = useState<string | null>(null);
-  useEffect(() => {
-    buyMembership().then((data) => {
-      setCheckOutUrl(data?.checkout_url);
-    });
-  }, [buyMembership, isError, checkOutUrl]);
+  const { membershipId } = useParams();
+  const { buyMembership, isError, isPending } = useBuyMembership();
+  // const [checkOutUrl, setCheckOutUrl] = useState<string | null>(null);
+  const [isProcessing, setIsProcessing] = useState(false);
+
+  const handleBuyMembership = async () => {
+    setIsProcessing(true);
+    try {
+      const data = await buyMembership();
+      if (data?.checkout_url) {
+        // setCheckOutUrl(data.checkout_url);
+        window.location.href = data.checkout_url;
+      }
+    } catch (error) {
+      console.error("Payment failed:", error);
+    } finally {
+      setIsProcessing(false);
+    }
+  };
 
   return (
-    <div>
-      <h1 className="text-white">Membership Page</h1>
-      <p className="text-white">Membership ID: {membershipId}</p>
-      <p className="text-white">We are processing your payment</p>
-      {isPending && <Loader dimensions="w-50 h-50" />}
-      {/* {isError && <p className="text-red-500">Error: {error}</p>} */}
-      {checkOutUrl && (
-        <Link to={checkOutUrl}>
-          <button className=" p-5 border-none bg-slate-500 text-white rounded-md transition hover:bg-slate-800">
-            Proceed to Payment
+    <div className="flex items-center justify-center min-h-screen bg-gray-100 px-4">
+      <div className="w-full max-w-lg bg-white text-black shadow-lg p-6 rounded-lg flex flex-col items-center gap-6">
+        <h1 className="text-3xl font-bold text-app_secondary-orange text-center">
+          🎉 Thank you for choosing our membership!
+        </h1>
+        <p className="text-gray-600 text-lg">
+          Membership ID: <span className="font-semibold">{membershipId}</span>
+        </p>
+
+        {isProcessing || isPending ? (
+          <Loader dimensions="w-16 h-16" />
+        ) : isError ? (
+          <p className="text-red-500 text-lg">⚠️ Oops! Something went wrong.</p>
+        ) : (
+          <button
+            onClick={handleBuyMembership}
+            className="w-full py-3 text-lg bg-gradient-to-r from-blue-500 to-indigo-600 text-white rounded-lg shadow-md transition-transform transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-blue-400 disabled:opacity-50"
+            disabled={isProcessing}
+          >
+            {isProcessing ? "Processing..." : "Checkout Now 🚀"}
           </button>
-        </Link>
-      )}
+        )}
+      </div>
     </div>
   );
 }

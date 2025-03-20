@@ -7,6 +7,14 @@ import Layout from "../Layout";
 import MembershipsPage from "../components/MembershipsPage";
 import Loader from "../components/custom-ui/Loader";
 import { useAuthCheck } from "../hooks/useCheckAuth";
+import ManageSupplementsPage from "../pages/User/ManageSupplementsPage";
+import ManageOffersPage from "../pages/User/ManageOffersPage";
+import ManageTrainersPage from "../pages/User/ManageTrainersPage";
+import ManagePaymentsPage from "../pages/User/ManagePaymentsPage";
+import ManageOrdersPage from "../pages/User/ManageOrdersPage";
+import ManageMembershipsPage from "../pages/Admin/ManageMembershipsPage";
+import ContactSupportPage from "../pages/Admin/ContactSupportPage";
+import AddNewAdminPage from "../pages/Admin/AddNewAdminPage";
 import { useAuth } from "../context/AuthContext";
 import ManageUsersPage from "../pages/Admin/ManageUsersPage";
 import LandingPage from "../components/LandingPage";
@@ -16,6 +24,7 @@ import UserDashboardPage from "../pages/User/UserDashboardPage";
 import AdminDashboardPage from "../pages/Admin/AdminDashboardPage";
 import NotFoundPage from "../pages/NotFoundPage";
 import MembershipPage from "../pages/User/MembershipPage";
+import { AdminRoute } from "./ProtectRoutes";
 
 // AppRoutes Component with TypeScript
 export default function AppRoutes(): JSX.Element {
@@ -74,18 +83,50 @@ export default function AppRoutes(): JSX.Element {
           element: <MembershipPage />,
         },
         {
-          // Protected route for admin
-          path: "/admin/dashboard",
-          element:
-            isAuthenticated && user?.role === "admin" ? (
-              <AdminDashboardPage />
-            ) : (
-              <Navigate to="/dashboard" /> // Redirect non-admins to user dashboard
-            ),
-        },
-        {
-          path: "/admin/manage-users",
-          element: <ManageUsersPage />,
+          path: "/admin",
+          element: <AdminRoute />,
+          children: [
+            {
+              path: "dashboard",
+              element: <AdminDashboardPage />,
+            },
+            {
+              path: "manage-users",
+              element: <ManageUsersPage />,
+            },
+            {
+              path: "manage-supplements",
+              element: <ManageSupplementsPage />,
+            },
+            {
+              path: "manage-offers",
+              element: <ManageOffersPage />,
+            },
+            {
+              path: "manage-trainers",
+              element: <ManageTrainersPage />,
+            },
+            {
+              path: "manage-payments",
+              element: <ManagePaymentsPage />,
+            },
+            {
+              path: "manage-orders",
+              element: <ManageOrdersPage />,
+            },
+            {
+              path: "manage-memberships",
+              element: <ManageMembershipsPage />,
+            },
+            {
+              path: "contact-support",
+              element: <ContactSupportPage />,
+            },
+            {
+              path: "add-admin",
+              element: <AddNewAdminPage />,
+            },
+          ],
         },
         {
           path: "*",

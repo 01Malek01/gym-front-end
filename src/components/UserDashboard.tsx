@@ -78,7 +78,9 @@ export default function UserDashboard() {
             <h2 className="text-3xl font-bold mb-2">User Profile</h2>
             <p className="mb-2">Name: {user?.username}</p>
             {user?.membershipStatus !== "pending" && (
-              <p className="mb-2">Membership: Premium</p>
+              <p className="mb-2">
+                Membership: {user?.membershipType?.type || "None"}
+              </p>
             )}
             <p className="mb-2">Email: {user?.email}</p>
             <p className="mb-2">
@@ -115,15 +117,16 @@ export default function UserDashboard() {
             <div className="grid grid-cols-2 gap-4">
               <div className="bg-gray-100 rounded-lg p-4">
                 <p className="text-lg font-bold mb-2">Current Plan</p>
-                <p className="mb-2">Premium</p>
-                <p className="mb-2">Expires: 2024-12-31</p>
-              </div>
-              <div className="bg-gray-100 rounded-lg p-4">
-                <p className="text-lg font-bold mb-2">Upgrade Options</p>
-                <ul>
-                  <li className="py-2 border-b border-gray-200">Pro</li>
-                  <li className="py-2 border-b border-gray-200">Business</li>
-                </ul>
+                <p className="mb-2">
+                  Membership Type: {user?.membershipType?.type}
+                </p>
+                <p className="mb-2">
+                  Membership Expiration Date: {user?.membershipExpirationDate}
+                </p>
+                <p className="mb-2">
+                  Membership Duration In Days:{" "}
+                  {user?.membershipType?.durationInDays} days
+                </p>
               </div>
             </div>
           )}

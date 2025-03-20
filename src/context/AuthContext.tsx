@@ -9,7 +9,6 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 const AuthContextProvider = ({ children }: React.PropsWithChildren) => {
   const [user, setUser] = useState<User | null>(null);
   const [isUserLoading, setIsUserLoading] = useState(true);
-  const [isSuccessUser, setIsSuccessUser] = useState(false);
   const [accessTokenState, setAccessTokenState] = useState<string | null>(null);
   const { isAuthenticated } = useAuthCheck();
   const { logoutUser } = useLogout();
@@ -17,7 +16,6 @@ const AuthContextProvider = ({ children }: React.PropsWithChildren) => {
     user: fetchedUser,
     error,
     isLoading: isFetchedUserLoading,
-    isSuccess: isFetchedUser,
   } = useGetUserProfile();
 
   const [isLoading, setIsLoading] = useState(false);
@@ -32,20 +30,21 @@ const AuthContextProvider = ({ children }: React.PropsWithChildren) => {
   }, []);
 
   useEffect(() => {
-    if (fetchedUser) {
-      setUser(fetchedUser?.user);
-    } else if (error) {
-      console.error("error occurred", error);
-      // logoutUser();
-      return;
-    }
-    if (isFetchedUserLoading) {
-      setIsUserLoading(isFetchedUserLoading);
-    }
-    if (isFetchedUser) {
-      setIsSuccessUser(isFetchedUser);
-    }
-  }, [error, fetchedUser, isFetchedUserLoading, isFetchedUser, logoutUser]);
+    const updateAuthState = async () => {
+      if (isFetchedUserLoading) return;
+
+      if (fetchedUser) {
+        setUser(fetchedUser?.user);
+        setIsUserLoading(false);
+      } else if (error) {
+        console.error("Error fetching user profile:", error);
+        setIsUserLoading(false);
+        // logoutUser();
+      }
+    };
+
+    updateAuthState();
+  }, [fetchedUser, error, isFetchedUserLoading, logoutUser]);
   return (
     <AuthContext.Provider
       value={{
@@ -55,7 +54,6 @@ const AuthContextProvider = ({ children }: React.PropsWithChildren) => {
         setAccessTokenState,
         isAuthenticated,
         isLoading,
-        isSuccessUser,
         setIsLoading,
         isUserLoading,
       }}
