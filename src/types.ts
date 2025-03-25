@@ -9,6 +9,21 @@ export interface AuthContextType {
   // isSuccessUser: boolean;
   isUserLoading: boolean;
 }
+export type SettingsContextType = {
+  settings: Settings | null;
+  setSettings: (settings: Settings | null) => void;
+  isLoadingSettings: boolean;
+};
+export type Settings = {
+  _id?: string;
+  siteName?: string;
+  siteEmail?: string;
+  sitePhone?: string;
+  siteAddress?: string;
+  siteLogo?: string;
+  siteCover?: string;
+  siteTheme?: string;
+};
 export type User = {
   _id?: string;
   username: string;
@@ -47,7 +62,7 @@ export interface Order {
   orderItems: OrderItem[];
   totalPrice: number;
   paymentMethod: "MWALLET" | "CARD" | "CASH";
-  paymentStatus: "pending" | "completed" | "failed";
+  paymentStatus: "pending" | "success" | "failed";
   createdAt: Date;
   __v?: number;
 }
@@ -59,6 +74,7 @@ export interface Supplement {
   price: number;
   stock: number;
   createdAt?: Date;
+  image?: string;
 }
 
 export interface Offer {

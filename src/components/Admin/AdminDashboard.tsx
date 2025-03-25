@@ -13,6 +13,7 @@ import {
   UserPlus,
   LogOut,
   ShoppingBag,
+  Settings,
 } from "lucide-react";
 
 export default function AdminDashboard() {
@@ -68,6 +69,11 @@ export default function AdminDashboard() {
       title: "Add New Admin",
       icon: <UserPlus size={50} />,
       href: "/admin/add-new-admin",
+    },
+    {
+      title: "Settings",
+      icon: <Settings size={50} />,
+      href: "/admin/settings",
     },
   ];
 

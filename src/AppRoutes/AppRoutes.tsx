@@ -7,11 +7,11 @@ import Layout from "../Layout";
 import MembershipsPage from "../components/MembershipsPage";
 import Loader from "../components/custom-ui/Loader";
 import { useAuthCheck } from "../hooks/useCheckAuth";
-import ManageSupplementsPage from "../pages/User/ManageSupplementsPage";
-import ManageOffersPage from "../pages/User/ManageOffersPage";
-import ManageTrainersPage from "../pages/User/ManageTrainersPage";
-import ManagePaymentsPage from "../pages/User/ManagePaymentsPage";
-import ManageOrdersPage from "../pages/User/ManageOrdersPage";
+import ManageSupplementsPage from "../pages/Admin/ManageSupplementsPage";
+import ManageOffersPage from "../pages/Admin/ManageOffersPage";
+import ManageTrainersPage from "../pages/Admin/ManageTrainersPage";
+import ManagePaymentsPage from "../pages/Admin/ManagePaymentsPage";
+import ManageOrdersPage from "../pages/Admin/ManageOrdersPage";
 import ManageMembershipsPage from "../pages/Admin/ManageMembershipsPage";
 import ContactSupportPage from "../pages/Admin/ContactSupportPage";
 import AddNewAdminPage from "../pages/Admin/AddNewAdminPage";
@@ -24,7 +24,11 @@ import UserDashboardPage from "../pages/User/UserDashboardPage";
 import AdminDashboardPage from "../pages/Admin/AdminDashboardPage";
 import NotFoundPage from "../pages/NotFoundPage";
 import MembershipPage from "../pages/User/MembershipPage";
+// import SupplementPaymentPage from "../pages/User/SupplementPaymentPage";
+// import SupplementSuccessPage from "../pages/User/SupplementSuccessPage";
 import { AdminRoute } from "./ProtectRoutes";
+import SupplementsPage from "../pages/User/SupplementsPage";
+import ManageSettings from "../pages/Admin/ManageSettings";
 
 // AppRoutes Component with TypeScript
 export default function AppRoutes(): JSX.Element {
@@ -83,6 +87,14 @@ export default function AppRoutes(): JSX.Element {
           element: <MembershipPage />,
         },
         {
+          path: "/supplement",
+          element: <SupplementsPage />,
+        },
+        {
+          path: "/contact-support",
+          element: <ContactSupportPage />,
+        },
+        {
           path: "/admin",
           element: <AdminRoute />,
           children: [
@@ -118,13 +130,14 @@ export default function AppRoutes(): JSX.Element {
               path: "manage-memberships",
               element: <ManageMembershipsPage />,
             },
-            {
-              path: "contact-support",
-              element: <ContactSupportPage />,
-            },
+
             {
               path: "add-admin",
               element: <AddNewAdminPage />,
+            },
+            {
+              path: "settings",
+              element: <ManageSettings />,
             },
           ],
         },

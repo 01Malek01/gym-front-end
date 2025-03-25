@@ -4,8 +4,12 @@ import { NavigationMenu, NavigationMenuList } from "./ui/navigation-menu";
 import "@/styles/nav.css";
 import Button1 from "./custom-ui/Button-1";
 import { useAuth } from "../context/AuthContext";
+import { useSettings } from "../context/SettingsContext";
 export default function Navbar() {
   const { isAuthenticated, user } = useAuth();
+  const settingsContext = useSettings();
+  const settings = settingsContext ? settingsContext.settings : null;
+  const siteName = settings?.siteName || "";
   const components = [
     {
       title: user?.role === "admin" ? "Dashboard" : "Home",
@@ -55,6 +59,8 @@ export default function Navbar() {
                     <Button1
                       title="Sign Up"
                       bgColor="bg-app_secondary-orange"
+                      type="button"
+                      disabled={false}
                     />
                   </Link>{" "}
                   <span className="text-white text-lg ">OR</span>
@@ -62,7 +68,12 @@ export default function Navbar() {
                     to="/login"
                     className=" text-sm font-medium text-app_neutral-lightGray transition-colors hover:opacity-80 p-1 group"
                   >
-                    <Button1 title="Login" bgColor="bg-app_neutral-charcoal" />
+                    <Button1
+                      title="Login"
+                      bgColor="bg-app_neutral-charcoal"
+                      type="button"
+                      disabled={false}
+                    />
                   </Link>
                 </>
               )}
@@ -70,7 +81,7 @@ export default function Navbar() {
           </NavigationMenu>
         </div>
         <div className="logo font-permanentMarker text-orange-400 font-bold text-4xl ">
-          Malek's Gym
+          {siteName}
         </div>
       </div>
     </div>

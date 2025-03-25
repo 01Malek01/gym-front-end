@@ -8,12 +8,12 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "./ui/form";
-import useSignUp from "../hooks/api/useSignUp";
+} from "../ui/form";
+import useSignUp from "../../hooks/api/useSignUp";
 import { Link } from "react-router-dom";
 
 export default function Signup() {
-  const { signupUser, isPending, isSuccess } = useSignUp();
+  const { signupUser, isPending } = useSignUp();
   const formSchema = z
     .object({
       username: z
