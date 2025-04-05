@@ -38,7 +38,12 @@ export default function MembershipBox({
         {desc}
       </p>
       <Link to={href}>
-        <Button1 title={buttonTitle} bgColor="bg-app_secondary-orange" />
+        <Button1
+          type="button"
+          disabled={false}
+          title={buttonTitle}
+          bgColor="bg-app_secondary-orange"
+        />
       </Link>
     </div>
   );

@@ -5,6 +5,7 @@ import { useState } from "react";
 import { Eye, EyeOff } from "lucide-react";
 import { Button } from "../ui/button";
 import { Input } from "../ui/input";
+import { User } from "../../types";
 
 const schema = z.object({
   username: z.string().min(1, "Username is required"),
@@ -16,13 +17,17 @@ const schema = z.object({
   }),
 });
 
-export default function UserForm({ onSubmit }) {
+export default function UserForm({
+  onSubmit,
+}: {
+  onSubmit: (data: User) => void;
+}) {
   const [showPassword, setShowPassword] = useState(false);
   const {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm({ resolver: zodResolver(schema) });
+  } = useForm<User>({ resolver: zodResolver(schema) });
 
   return (
     <div className="max-w-md mx-auto bg-white p-6 rounded-lg shadow-md">

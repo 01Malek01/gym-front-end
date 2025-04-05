@@ -38,6 +38,8 @@ export type User = {
     price: number;
     durationInDays: number;
   };
+  password?: string;
+
   membershipExpirationDate?: React.ReactNode;
 };
 

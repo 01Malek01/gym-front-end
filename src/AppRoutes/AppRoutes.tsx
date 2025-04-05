@@ -28,7 +28,8 @@ import MembershipPage from "../pages/User/MembershipPage";
 // import SupplementSuccessPage from "../pages/User/SupplementSuccessPage";
 import { AdminRoute } from "./ProtectRoutes";
 import SupplementsPage from "../pages/User/SupplementsPage";
-import ManageSettings from "../pages/Admin/ManageSettings";
+import ManageSettingsPage from "../pages/Admin/ManageSettings";
+import SupplementPaymentPage from "../pages/User/SupplementPage";
 
 // AppRoutes Component with TypeScript
 export default function AppRoutes(): JSX.Element {
@@ -68,6 +69,11 @@ export default function AppRoutes(): JSX.Element {
             <LoginPage />
           ),
         },
+        //TO DO :  make this show gym owner contact details
+        {
+          path: "/contact",
+          element: <ContactSupportPage />,
+        },
         {
           // Prevent admins from accessing the normal user dashboard
           path: "/dashboard",
@@ -89,6 +95,10 @@ export default function AppRoutes(): JSX.Element {
         {
           path: "/supplement",
           element: <SupplementsPage />,
+        },
+        {
+          path: "/supplement/:supplementId",
+          element: <SupplementPaymentPage />,
         },
         {
           path: "/contact-support",
@@ -137,7 +147,7 @@ export default function AppRoutes(): JSX.Element {
             },
             {
               path: "settings",
-              element: <ManageSettings />,
+              element: <ManageSettingsPage />,
             },
           ],
         },

@@ -2,8 +2,13 @@ import { useEffect, useState } from "react";
 import Loader from "../../components/custom-ui/Loader";
 import { Supplement } from "../../types";
 import useGetSupplements from "../../hooks/api/supplements/useGetSupplements";
+import { Link } from "react-router-dom";
+import Button1 from "../../components/custom-ui/Button-1";
+import { useAuth } from "../../context/AuthContext";
 
 export default function SupplementsPage() {
+  const { isAuthenticated } = useAuth();
+
   const [supplements, setSupplements] = useState<Supplement[]>([]);
   const { data, isLoading, isError } = useGetSupplements();
   useEffect(() => {
@@ -27,6 +32,10 @@ export default function SupplementsPage() {
           ) : isError ? (
             <p className=" text-center text-red-500 text-xl">
               Error loading supplements
+            </p>
+          ) : supplements.length < 1 ? (
+            <p className=" text-center text-purple-500 text-xl mt-10">
+              No supplements available at the moment.
             </p>
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -60,6 +69,21 @@ export default function SupplementsPage() {
                       {supplement.stock > 0 ? "In Stock" : "Out of Stock"}
                     </span>
                   </div>
+                  <Link
+                    className="p-2 mt-2"
+                    to={
+                      isAuthenticated
+                        ? `/supplement/${supplement._id}`
+                        : "/login"
+                    }
+                  >
+                    <Button1
+                      type="button"
+                      disabled={false}
+                      title={"Buy"}
+                      bgColor="bg-app_secondary-orange"
+                    />
+                  </Link>
                 </div>
               ))}
             </div>

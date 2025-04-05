@@ -19,10 +19,10 @@ export default function Navbar() {
       title: "Memberships",
       href: "/membership",
     },
-    {
-      title: "Trainers",
-      href: "/trainer",
-    },
+    // {
+    //   title: "Trainers",
+    //   href: "/trainer",
+    // },
     {
       title: "Supplements",
       href: "/supplement",

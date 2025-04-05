@@ -8,6 +8,8 @@ import useCreateSupplement from "../../hooks/api/Admin/supplements/useCreateSupp
 import useDeleteSupplement from "../../hooks/api/Admin/supplements/useDeleteSupplement";
 import { Supplement } from "../../types";
 import { useToast } from "../../hooks/use-toast";
+import EditSupplementForm from "../../components/Supplement/EditSupplementForm";
+import useEditSupplement from "../../hooks/api/Admin/supplements/useEditSupplement";
 
 // Zod schema for form validation
 const supplementSchema = z.object({
@@ -34,8 +36,12 @@ const supplementSchema = z.object({
 type SupplementFormData = z.infer<typeof supplementSchema>;
 
 export default function ManageSupplementsPage() {
+  const [isEditMode, setIsEditMode] = useState(false);
+  const [selectedSupplement, setSelectedSupplement] =
+    useState<Supplement | null>(null);
   const [supplements, setSupplements] = useState<Supplement[]>([]);
-  const { data, isLoading } = useGetSupplements();
+  const { data, isLoading, refetch } = useGetSupplements();
+
   const {
     createSupplement,
     isPending: isCreatePending,
@@ -76,6 +82,13 @@ export default function ManageSupplementsPage() {
     }
   }, [isSuccess, isError, toast]);
 
+  const { isSuccess: isEditSuccess } = useEditSupplement();
+  useEffect(() => {
+    if (isEditSuccess) {
+      setIsEditMode(false);
+    }
+  }, [isEditSuccess, setIsEditMode]);
+
   // Submit function for adding a supplement
   const onSubmit = async (formData: SupplementFormData) => {
     const formDataWithImage = new FormData();
@@ -109,7 +122,13 @@ export default function ManageSupplementsPage() {
 
   return (
     <div className="min-h-screen bg-gray-100 p-8">
-      <div className="max-w-6xl mx-auto">
+      <div className="max-w-6xl mx-auto relative">
+        <EditSupplementForm
+          setIsEditMode={setIsEditMode}
+          isEditMode={isEditMode}
+          supplement={selectedSupplement}
+          refetch={refetch}
+        />
         <div className="bg-white rounded-lg shadow-md p-6">
           <h1 className="text-2xl font-bold text-app_secondary-orange mb-6">
             Manage Supplements
@@ -252,6 +271,15 @@ export default function ManageSupplementsPage() {
                           disabled={isDeletePending}
                         >
                           {isDeletePending ? "Deleting..." : "Delete"}
+                        </button>
+                        <button
+                          className="ml-2 text-blue-600 hover:text-blue-900"
+                          onClick={() => {
+                            setIsEditMode(true);
+                            setSelectedSupplement(supplement);
+                          }}
+                        >
+                          Edit{" "}
                         </button>
                       </td>
                     </tr>

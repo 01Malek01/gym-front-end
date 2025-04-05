@@ -7,7 +7,7 @@ import { Settings } from "../../types";
 import useSetSettings from "../../hooks/api/Admin/settings/useSetSettings";
 import { useEffect } from "react";
 import { useToast } from "../../hooks/use-toast";
-export default function ManageSettings() {
+export default function ManageSettingsPage() {
   const settingsContext = useSettings();
   if (!settingsContext) {
     throw new Error("Settings context is not available");

@@ -31,7 +31,10 @@ const AuthContextProvider = ({ children }: React.PropsWithChildren) => {
 
   useEffect(() => {
     const updateAuthState = async () => {
-      if (isFetchedUserLoading) return;
+      if (isFetchedUserLoading) {
+        setIsUserLoading(true);
+        return;
+      }
 
       if (fetchedUser) {
         setUser(fetchedUser?.user);

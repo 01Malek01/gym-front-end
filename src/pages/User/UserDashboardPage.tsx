@@ -29,18 +29,15 @@ export default function UserDashboardPage() {
     }
   }, [userOrders, isOrdersSuccess]);
 
-  if (isUserLoading && !isAuthenticated) {
-    return <Loader dimensions="h-[150px] w-[150px]" />;
-  }
-
-  return (
+  return isUserLoading || !isAuthenticated ? (
+    <Loader dimensions="h-[150px] w-[150px]" />
+  ) : (
     <div className="Dashboard-wrapper">
       <div className="h-screen grid grid-rows-[auto_1fr] dashboard-container">
         <div className="grid grid-cols-2 gap-4 p-4">
           {/* Orders History Section */}
           <div className="bg-white rounded-lg shadow-md p-4 orders overflow-y-scroll h-80">
             <h2 className="text-3xl font-bold mb-2">Order History</h2>
-
             <ul>
               {isOrdersLoading && <Loader dimensions="h-[50px] w-[50px]" />}
               {isOrdersSuccess ? (

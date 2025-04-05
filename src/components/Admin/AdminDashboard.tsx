@@ -63,7 +63,7 @@ export default function AdminDashboard() {
     {
       title: "Contact Support",
       icon: <MessageSquare size={50} />,
-      href: "/admin/contact-support",
+      href: "/contact-support",
     },
     {
       title: "Add New Admin",
