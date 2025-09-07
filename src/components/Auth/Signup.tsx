@@ -10,10 +10,12 @@ import {
   FormMessage,
 } from "../ui/form";
 import useSignUp from "../../hooks/api/useSignUp";
-import { Link } from "react-router-dom";
+import { Link  , useNavigate } from "react-router-dom";
+import { useEffect } from "react";
 
 export default function Signup() {
-  const { signupUser, isPending } = useSignUp();
+  const navigate = useNavigate();
+  const { signupUser, isPending, isSuccess} = useSignUp();
   const formSchema = z
     .object({
       username: z
@@ -44,9 +46,16 @@ export default function Signup() {
 
   const { handleSubmit } = form;
   const signUp = async (data: z.infer<typeof formSchema>) => {
-    await signupUser(data);
+    await signupUser(data); 
+      if(isSuccess){
+        navigate("/")
+      }
   };
-
+useEffect(() => {
+  if(isSuccess){
+    navigate("/")
+  }
+}, [isSuccess]) 
   return (
     <div className="signup-wrapper min-h-screen flex items-center justify-center bg-gray-900 text-white">
       <div className="signup-container bg-gray-800 p-8 rounded-lg shadow-lg max-w-md w-full">

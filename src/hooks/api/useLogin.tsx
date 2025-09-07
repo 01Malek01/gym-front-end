@@ -33,7 +33,7 @@ const useLogin = () => {
     onSuccess: (data) => {
       setAccessTokenState(data?.accessToken);
       localStorage.setItem("accessToken", data?.accessToken);
-      setUser(data.user);
+      setUser(data?.user);
       setIsAuthenticated(true);
       navigate("/dashboard");
     },
