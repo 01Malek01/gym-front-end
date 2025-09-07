@@ -15,10 +15,12 @@ const AuthContextProvider = ({ children }: React.PropsWithChildren) => {
   const {
     user: fetchedUser,
     error,
-    isLoading: isFetchedUserLoading,
+    isLoading: isFetchingUser,
+    refetch:refetchUser
   } = useGetUserProfile();
 
   const [isLoading, setIsLoading] = useState(false);
+  //check for access token in local storage
   useEffect(() => {
     // Check if localStorage is available
     if (typeof window !== "undefined") {
@@ -31,23 +33,35 @@ const AuthContextProvider = ({ children }: React.PropsWithChildren) => {
 
   useEffect(() => {
     const updateAuthState = async () => {
-      if (isFetchedUserLoading) {
+      // Set loading state when starting to fetch user
+      if (isFetchingUser) {
         setIsUserLoading(true);
-        return;
+        setIsLoading(true);
+        return; // Wait for the fetch to complete
       }
 
+      // If we have a user, update the state
       if (fetchedUser) {
         setUser(fetchedUser?.user);
         setIsUserLoading(false);
-      } else if (error) {
+        setIsLoading(false);
+      } 
+      // If there was an error
+      else if (error) {
         console.error("Error fetching user profile:", error);
         setIsUserLoading(false);
-        // logoutUser();
+        setIsLoading(false);
+        // logoutUser(); // Uncomment if you want to log out on error
+      }
+      // If no user and no error, but we're not loading anymore
+      else if (!isFetchingUser) {
+        setIsUserLoading(false);
+        setIsLoading(false);
       }
     };
 
     updateAuthState();
-  }, [fetchedUser, error, isFetchedUserLoading, logoutUser]);
+  }, [fetchedUser, error, isFetchingUser, logoutUser]);
   return (
     <AuthContext.Provider
       value={{
@@ -59,6 +73,7 @@ const AuthContextProvider = ({ children }: React.PropsWithChildren) => {
         isLoading,
         setIsLoading,
         isUserLoading,
+        refetchUser
       }}
     >
       {children}

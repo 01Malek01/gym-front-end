@@ -1,8 +1,7 @@
 import { useNavigate, useLocation } from "react-router-dom";
 import { useEffect } from "react";
 import Loader from "../../components/custom-ui/Loader";
-import useGetSupplement from "../../hooks/api/Admin/supplements/useGetSupplement";
-import { Supplement } from "../../types";
+import useGetSupplement from "@/hooks/api/supplements/useGetSupplement";
 
 export default function SupplementSuccessPage() {
   const navigate = useNavigate();

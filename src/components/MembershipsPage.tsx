@@ -71,7 +71,7 @@ export default function MembershipsPage() {
           <Loader dimensions="h-[150px] w-[150px]" />
         </div>
       ) : (
-        <div className="memberships-container grid grid-cols-1 gap-5 flex-col md:grid-cols-4 p-5">
+        <div className="memberships-container grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5 p-5">
           {membershipsState?.map((membership: Membership) => (
             <MembershipBox
               key={membership._id}

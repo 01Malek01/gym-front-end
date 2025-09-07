@@ -18,7 +18,7 @@ const useRefreshToken = () => {
 
       // Show error toast
       toast({
-        type: "error",
+        variant: "destructive",
         title: "Session Expired",
         description: "Please log in again.",
       });
@@ -36,7 +36,7 @@ const useRefreshToken = () => {
     mutationFn: refreshToken,
     onError: (error) => {
       console.error("Mutation error while refreshing token:", error);
-    },
+        },
   });
 
   return { refreshAccessToken };

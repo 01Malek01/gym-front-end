@@ -5,7 +5,7 @@ import Loader from "../../components/custom-ui/Loader";
 
 export default function MembershipPage() {
   const { membershipId } = useParams();
-  const { buyMembership, isError, isPending } = useBuyMembership();
+  const { buyMembership, isError, isPending ,error} = useBuyMembership();
   // const [checkOutUrl, setCheckOutUrl] = useState<string | null>(null);
   const [isProcessing, setIsProcessing] = useState(false);
 
@@ -37,7 +37,11 @@ export default function MembershipPage() {
         {isProcessing || isPending ? (
           <Loader dimensions="w-16 h-16" />
         ) : isError ? (
-          <p className="text-red-500 text-lg">⚠️ Oops! Something went wrong.</p>
+          <>
+            {/* eslint-disable-next-line @typescript-eslint/ban-ts-comment */}
+            {/* @ts-expect-error */}
+            <p className="text-red-500 text-lg">{error?.response?.data?.message}</p>
+          </>
         ) : (
           <button
             onClick={handleBuyMembership}

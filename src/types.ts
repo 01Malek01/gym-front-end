@@ -1,5 +1,6 @@
 export interface AuthContextType {
   user: User | null;
+  refetchUser: () => void;
   setUser: (user: User | null) => void;
   accessTokenState: string | null;
   setAccessTokenState: (accessToken: string | null) => void;

@@ -3,7 +3,7 @@ import axiosInstance from "../../api/AxiosConfig";
 import { useAuth } from "../../context/AuthContext";
 
 const useSignUp = () => {
-  const { setAccessToken, setUser } = useAuth();
+  const { setAccessTokenState, setUser } = useAuth();
   const signup = async (data: {
     username: string;
     email: string;
@@ -27,7 +27,7 @@ const useSignUp = () => {
     mutationFn: signup,
     mutationKey: ["signup"],
     onSuccess: (data) => {
-      setAccessToken(data.accessToken);
+      setAccessTokenState(data.accessToken);
       setUser(data.newUser);
     },
   });

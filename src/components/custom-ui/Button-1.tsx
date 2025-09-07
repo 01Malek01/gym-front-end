@@ -3,8 +3,8 @@ import { cn } from "../../lib/utils";
 type Props = {
   title: string;
   bgColor: string;
-  type: "button" | "submit" | "reset";
-  disabled: boolean;
+  type?: "button" | "submit" | "reset";
+  disabled?: boolean;
 };
 const Button1 = ({ title, bgColor, type, disabled }: Props) => {
   return (

@@ -4,7 +4,7 @@ import { useAuth } from "../../context/AuthContext";
 import { useToast } from "../use-toast";
 import { useNavigate } from "react-router-dom";
 import { useAuthCheck } from "../useCheckAuth";
-
+import { CustomAxiosError, extractErrorMessage } from "../../lib/utils";
 const useLogin = () => {
   const { setAccessTokenState, setUser } = useAuth();
   const { toast } = useToast();
@@ -17,7 +17,7 @@ const useLogin = () => {
     } catch (err) {
       toast({
         title: "Error",
-        description: err?.response?.data?.message,
+        description: extractErrorMessage(err as CustomAxiosError),
         variant: "destructive",
       });
     }

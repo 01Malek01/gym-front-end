@@ -1,5 +1,4 @@
 import { useState } from "react";
-import Loader from "../../components/custom-ui/Loader";
 
 export default function ManagePaymentsPage() {
   const [payments] = useState([
@@ -21,7 +20,6 @@ export default function ManagePaymentsPage() {
     },
   ]);
 
-  const [isLoading] = useState(false);
 
   return (
     <div className="min-h-screen bg-gray-100 p-8">

@@ -68,15 +68,16 @@ export default function Hero() {
               className="cta"
             >
               <Link to={"/signup"}>
-                <div
+                <motion.div
+                  whileHover={{ scale: 1.05 }}
                   className="text-lg italic font-medium text-slate-50 rounded-full 
                 bg-gradient-to-r from-app_secondary-brightRed to-app_secondary-coolBlue
-                transition-all duration-300 ease-in-out transform hover:scale-105 
+             transition-colors duration-300 ease-in-out transform hover:scale-105 
                 hover:bg-gradient-to-r hover:from-app_secondary-brightRed 
                 hover:to-app_secondary-crimsonRed p-5 shadow-lg"
                 >
                   Join Now
-                </div>
+                </motion.div>
               </Link>
             </motion.div>
             <motion.div
@@ -89,6 +90,7 @@ export default function Hero() {
                 <Button1
                   title="Browse Memberships"
                   bgColor="bg-app_neutral-graphite"
+                  type="button"
                 />
               </Link>
             </motion.div>

@@ -11,6 +11,7 @@ const useGetUserProfile = () => {
     error,
     isLoading,
     isSuccess,
+    refetch 
   } = useQuery({
     queryKey: ["user-profile"],
     queryFn: getUserProfile,
@@ -22,7 +23,7 @@ const useGetUserProfile = () => {
       }
     },
   });
-  return { user, error, isLoading, isSuccess };
+  return { user, error, isLoading, isSuccess, refetch };
 };
 
 export default useGetUserProfile;
