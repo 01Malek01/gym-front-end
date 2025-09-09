@@ -12,7 +12,7 @@ export default function Footer() {
         {/* Company Info */}
         <div className="space-y-4">
           <div className="logo font-permanentMarker text-orange-400 font-bold text-4xl">
-            Malek's Gym
+            {siteName}
           </div>
           <p className="text-slate-400">
             Achieve your fitness goals with top-notch facilities, experienced

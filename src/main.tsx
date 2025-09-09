@@ -9,16 +9,19 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { Toaster } from "./components/ui/toaster.tsx";
 import CheckAuthProvider from "./hooks/useCheckAuth.tsx";
 import { SettingsContextProvider } from "./context/SettingsContext.tsx";
+import NotificationsProvider from "./context/NotificationContext.tsx";
 
 const queryClient = new QueryClient();
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
-    <QueryClientProvider client={queryClient}>
+    <QueryClientProvider client={queryClient}> 
       <CheckAuthProvider>
         <AuthContextProvider>
           <SettingsContextProvider>
+            <NotificationsProvider>
             <AppRoutes />
             <Toaster />
+            </NotificationsProvider>
           </SettingsContextProvider>
         </AuthContextProvider>
       </CheckAuthProvider>
