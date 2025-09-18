@@ -1,62 +1,111 @@
-'use client';
+"use client";
 
-import { createContext, useContext, ReactNode, useEffect, useState } from 'react';
- import {io} from 'socket.io-client';
-import { useAuth } from '../context/AuthContext';
-import useGetNotifications from '@/hooks/api/useGetNotifications';
-import { RefetchOptions,QueryObserverResult } from '@tanstack/react-query';
-type NotificationType = {
+import {
+  createContext,
+  useContext,
+  ReactNode,
+  useEffect,
+  useState,
+  useMemo,
+} from "react";
+import { io, Socket } from "socket.io-client";
+import { useAuth } from "../context/AuthContext";
+import useGetNotifications from "@/hooks/api/notifications/useGetNotifications";
+import { RefetchOptions, QueryObserverResult } from "@tanstack/react-query";
+import useMarkAllAsRead from "@/hooks/api/notifications/useMarkAllAsRead";
+import { useToast } from "@/hooks/use-toast";
+import { extractErrorMessage } from "@/lib/utils";
+
+interface Notification {
   id: string;
   message: string;
   createdAt: string;
- user:string;
-};
+  user: string;
+  isRead?: boolean;
+}
 
-type NotificationsContextType = {
-  notifications:NotificationType[],
-  isNotificationsLoading:boolean,
-  refetchNotifications: (options?: RefetchOptions) => Promise<QueryObserverResult<NotificationType[],Error>   >,
-  isError: boolean,
-  isSuccess: boolean,
+interface NotificationsContextType {
+  notifications: Notification[];
+  isLoading: boolean;
+  refetchNotifications: (
+    options?: RefetchOptions
+  ) => Promise<QueryObserverResult<Notification[], Error>>;
+  isError: boolean;
+  isSuccess: boolean;
+  markAllAsRead: () => Promise<void>;
+  error: Error | null;
+  isMarkingAsRead: boolean;
+  isMarkAllAsReadSuccess: boolean;
+}
 
+const NotificationsContext = createContext<
+  NotificationsContextType | undefined
+>(undefined);
 
-};  
+export default function NotificationsProvider({
+  children,
+}: {
+  children: ReactNode;
+}) {
+  const [notifications, setNotifications] = useState<Notification[]>([]);
+  const { isAuthenticated, isLoading: isUserLoading, user } = useAuth();
+  const { toast } = useToast();
 
-const NotificationsContext = createContext<NotificationsContextType | undefined>(undefined);
+  // API hooks
+  const {
+    notifications: notificationsData,
+    isLoading: isNotificationsLoading,
+    error: notificationsError,
+    isSuccess: isNotificationsSuccess,
+    refetch: refetchNotifications,
+  } = useGetNotifications();
 
-export default function NotificationsProvider({ children }: { children: ReactNode }) {
-  const [notifications, setNotifications] = useState<NotificationType[]>([]);
-  const { isAuthenticated,isLoading:isUserLoading,user } = useAuth();
-  const [isNotificationsLoading, setIsNotificationsLoading] = useState(false);
-const {notifications:notificationsData , isLoading ,error:notificationsError,isSuccess:isNotificationsSuccess,refetch:refetchNotifications} = useGetNotifications();
+  const {
+    markAllAsRead,
+    error: markAllAsReadError,
+    isPending: isMarkingAsRead,
+    isSuccess: isMarkAllAsReadSuccess,
+  } = useMarkAllAsRead();
+
+  // Handle notifications data
   useEffect(() => {
-    
-     if( isLoading){
-      setIsNotificationsLoading(true);
-     }
     if (notificationsData) {
+      console.log("Notifications data:", notificationsData);
       setNotifications(notificationsData);
-      console.log( notificationsData)
-        setIsNotificationsLoading(false);
-    } 
-    if( !isLoading){
-      setIsNotificationsLoading(false);
-     }
-  }, [notificationsData, isLoading]);
+    }
+  }, [notificationsData]);
 
+  // Handle mark all as read toast notifications
+  useEffect(() => {
+    if (isMarkAllAsReadSuccess) {
+      toast({
+        title: "All notifications marked as read",
+        variant: "default",
+      });
+    } else if (markAllAsReadError) {
+      toast({
+        title: "Failed to mark all notifications as read",
+        description: extractErrorMessage(markAllAsReadError),
+        variant: "destructive",
+      });
+    }
+  }, [isMarkAllAsReadSuccess, markAllAsReadError, toast]);
+
+  // Socket connection
   useEffect(() => {
     if (!user?._id || !isAuthenticated || isUserLoading) return;
-    
-    // Create socket connection only once
-    const socket = io(import.meta.env.VITE_BACK_END || "http://localhost:5000", {
-      withCredentials: true,
-      autoConnect: true,
-      reconnection: true,
-      reconnectionAttempts: 5,
-      reconnectionDelay: 1000,
-    });
 
-    // Handle connection
+    const socket: Socket = io(
+      import.meta.env.VITE_BACK_END || "http://localhost:5000",
+      {
+        withCredentials: true,
+        autoConnect: true,
+        reconnection: true,
+        reconnectionAttempts: 5,
+        reconnectionDelay: 1000,
+      }
+    );
+
     const handleConnect = () => {
       console.log("Socket connected:", socket.id);
       if (user?._id) {
@@ -65,20 +114,20 @@ const {notifications:notificationsData , isLoading ,error:notificationsError,isS
       }
     };
 
-
-    // Handle notifications
-    const handleNotification = (data: NotificationType) => {
-      setNotifications(prev => [...prev, data]);
+    const handleNotification = (data: Notification) => {
+      setNotifications((prev) => [data, ...prev]);
       console.log("Received notification:", data);
+    };
+
+    const handleError = (error: unknown) => {
+      console.error("Socket error:", error);
     };
 
     // Setup event listeners
     socket.on("connect", handleConnect);
     socket.on("newNotification", handleNotification);
+    socket.on("error", handleError);
 
-    socket .on("error", (error: unknown) => {
-  console.error("Socket error:", error);
-});
     // Initial connection
     if (socket.connected && user?._id) {
       socket.emit("join", user._id);
@@ -88,38 +137,65 @@ const {notifications:notificationsData , isLoading ,error:notificationsError,isS
     return () => {
       console.log("Cleaning up socket connection");
       socket.off("connect", handleConnect);
-      socket.off("notification", handleNotification);
-      socket.off("error", (error: unknown) => {
-        console.error("Socket error:", error);
-      });
-      socket.close();
+      socket.off("newNotification", handleNotification);
+      socket.off("error", handleError);
+      socket.disconnect();
     };
   }, [user?._id, isAuthenticated, isUserLoading]);
 
-  // Calculate unread count
-
-  const value = {
-    notifications,
-    isNotificationsLoading,
-    refetchNotifications,
-    isError:notificationsError,
-    isSuccess:isNotificationsSuccess,
-    
+  // Mark all as read function
+  const handleMarkAllAsRead = async (): Promise<void> => {
+    try {
+      await markAllAsRead();
+      setNotifications([]);
+      // Optionally refetch notifications after marking as read
+      await refetchNotifications();
+    } catch (error) {
+      console.error("Failed to mark all as read:", error);
+    }
   };
 
+  const contextValue = useMemo(
+    (): NotificationsContextType => ({
+      notifications,
+      isLoading: isNotificationsLoading || isUserLoading,
+      refetchNotifications,
+      isError: !!notificationsError,
+      isSuccess: isNotificationsSuccess,
+      markAllAsRead: handleMarkAllAsRead,
+      error: markAllAsReadError || notificationsError,
+      isMarkingAsRead,
+      isMarkAllAsReadSuccess,
+    }),
+    [
+      notifications,
+      isNotificationsLoading,
+      isUserLoading,
+      refetchNotifications,
+      notificationsError,
+      isNotificationsSuccess,
+      markAllAsReadError,
+      isMarkingAsRead,
+      isMarkAllAsReadSuccess,
+      handleMarkAllAsRead,
+    ]
+  );
+
   return (
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-expect-error
-    <NotificationsContext.Provider value={value}>
+    <NotificationsContext.Provider value={contextValue}>
       {children}
     </NotificationsContext.Provider>
   );
 }
 
-export function useNotifications() {
+export function useNotifications(): NotificationsContextType {
   const context = useContext(NotificationsContext);
+
   if (context === undefined) {
-    throw new Error('useNotifications must be used within a NotificationsProvider');
+    throw new Error(
+      "useNotifications must be used within a NotificationsProvider"
+    );
   }
+
   return context;
 }

@@ -1,5 +1,5 @@
+import axiosInstance from "@/api/AxiosConfig";
 import { useQuery } from "@tanstack/react-query";
-import axiosInstance from "../../api/AxiosConfig";
 
 const useGetNotifications = () => {
   const getNotifications = async () => {
@@ -9,9 +9,9 @@ const useGetNotifications = () => {
   const {
     data: notifications,
     error,
-    isLoading,  
+    isLoading,
     isSuccess,
-    refetch 
+    refetch,
   } = useQuery({
     queryKey: ["notifications"],
     queryFn: getNotifications,
