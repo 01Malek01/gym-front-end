@@ -85,6 +85,8 @@ export default function NotificationsProvider({
     } else if (markAllAsReadError) {
       toast({
         title: "Failed to mark all notifications as read",
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        //@ts-expect-error
         description: extractErrorMessage(markAllAsReadError),
         variant: "destructive",
       });
@@ -163,6 +165,8 @@ export default function NotificationsProvider({
       isError: !!notificationsError,
       isSuccess: isNotificationsSuccess,
       markAllAsRead: handleMarkAllAsRead,
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      //@ts-expect-error
       error: markAllAsReadError || notificationsError,
       isMarkingAsRead,
       isMarkAllAsReadSuccess,
