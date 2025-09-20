@@ -18,6 +18,7 @@ const useLogin = () => {
         description: extractErrorMessage(err as CustomAxiosError),
         variant: "destructive",
       });
+      throw err;
     }
   };
   const {

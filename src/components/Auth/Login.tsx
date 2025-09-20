@@ -15,15 +15,16 @@ import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
 export default function Login() {
-  const { loginUser, isPending,isSuccess } = useLogin();
+  const { loginUser, isPending,isSuccess ,isError} = useLogin();
 
   const navigate = useNavigate();
 
   useEffect (() =>{ 
-    if(isSuccess){
+    if(isSuccess && !isError){
       navigate("/dashboard")
     }
-  },[isSuccess ])
+      
+  },[isSuccess,isError])
   const formSchema = z.object({
     email: z.string().email({ message: "Invalid email" }),
     password: z
