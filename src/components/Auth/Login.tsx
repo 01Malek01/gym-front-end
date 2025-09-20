@@ -11,10 +11,19 @@ import {
 } from "../ui/form";
 import useLogin from "../../hooks/api/useLogin";
 import { Link } from "react-router-dom";
+import { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 
 export default function Login() {
-  const { loginUser, isPending } = useLogin();
+  const { loginUser, isPending,isSuccess } = useLogin();
 
+  const navigate = useNavigate();
+
+  useEffect (() =>{ 
+    if(isSuccess){
+      navigate("/dashboard")
+    }
+  },[isSuccess ])
   const formSchema = z.object({
     email: z.string().email({ message: "Invalid email" }),
     password: z

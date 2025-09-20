@@ -2,13 +2,11 @@ import { useMutation } from "@tanstack/react-query";
 import axiosInstance from "../../api/AxiosConfig";
 import { useAuth } from "../../context/AuthContext";
 import { useToast } from "../use-toast";
-import { useNavigate } from "react-router-dom";
 import { useAuthCheck } from "../useCheckAuth";
 import { CustomAxiosError, extractErrorMessage } from "../../lib/utils";
 const useLogin = () => {
   const { setAccessTokenState, setUser } = useAuth();
   const { toast } = useToast();
-  const navigate = useNavigate();
   const { setIsAuthenticated } = useAuthCheck();
   const login = async (data: { email: string; password: string }) => {
     try {
@@ -35,7 +33,6 @@ const useLogin = () => {
       localStorage.setItem("accessToken", data?.accessToken);
       setUser(data?.user);
       setIsAuthenticated(true);
-      navigate("/dashboard");
     },
   });
 
