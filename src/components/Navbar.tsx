@@ -60,7 +60,7 @@ export default function Navbar() {
               onClick={() => setShowNotification(!showNotification)} 
             />
             {hasUnreadNotifications && (
-              <span className="absolute top-0 right-0 h-3 w-3 bg-red-500 rounded-full border-2 border-app_secondary"></span>
+              <span className="absolute -top-1 -right-1 h-3 w-3 bg-red-500 rounded-full border-2 border-app_secondary"></span>
             )}
           </div>
           <NavigationMenu>

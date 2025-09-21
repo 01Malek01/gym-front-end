@@ -3,14 +3,13 @@ import { useNotifications } from "@/context/NotificationContext";
 export default function Notification() {
   const {
     notifications,
-    isError,
-    isLoading,
-
+    loadingNotifications,
     isMarkingAsRead,
+     isError,
     markAllAsRead,
   } = useNotifications();
 
-  if (isLoading) {
+  if (loadingNotifications) {
     return (
       <div className="wrapper">
         <div className="container w-96 h-96 bg-slate-300 p-3 m-2 rounded-lg shadow-lg flex items-center justify-center">
@@ -24,7 +23,7 @@ export default function Notification() {
   if (isError) {
     return (
       <div className="wrapper">
-        <div className="container w-96 h-96 bg-slate-300 p-3 m-2 rounded-lg shadow-lg flex items-center justify-center">
+        <div className="container w-96 h-96 bg-sla  te-300 p-3 m-2 rounded-lg shadow-lg flex items-center justify-center">
           <p className="text-red-600">Error loading notifications</p>
         </div>
       </div>

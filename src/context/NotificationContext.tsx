@@ -27,6 +27,7 @@ interface Notification {
 interface NotificationsContextType {
   notifications: Notification[];
   isLoading: boolean;
+  loadingNotifications: boolean;
   refetchNotifications: (
     options?: RefetchOptions
   ) => Promise<QueryObserverResult<Notification[], Error>>;
@@ -67,13 +68,18 @@ export default function NotificationsProvider({
     isSuccess: isMarkAllAsReadSuccess,
   } = useMarkAllAsRead();
 
-  // Handle notifications data
   useEffect(() => {
-    if (notificationsData) {
-      console.log("Notifications data:", notificationsData);
+    if (isAuthenticated) {
+      refetchNotifications();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isAuthenticated]);
+
+  useEffect(() => {
+    if (isAuthenticated && notificationsData && isNotificationsSuccess) {
       setNotifications(notificationsData);
     }
-  }, [notificationsData]);
+  }, [isAuthenticated, notificationsData, isNotificationsSuccess]);
 
   // Handle mark all as read toast notifications
   useEffect(() => {
@@ -170,6 +176,7 @@ export default function NotificationsProvider({
       error: markAllAsReadError || notificationsError,
       isMarkingAsRead,
       isMarkAllAsReadSuccess,
+      loadingNotifications: isNotificationsLoading || isUserLoading
     }),
     [
       notifications,
@@ -182,6 +189,8 @@ export default function NotificationsProvider({
       isMarkingAsRead,
       isMarkAllAsReadSuccess,
       handleMarkAllAsRead,
+      isNotificationsLoading,
+      isUserLoading
     ]
   );
 
